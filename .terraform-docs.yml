@@ -8,10 +8,12 @@ content: |-
 
   # Usage - Module
 
-  ## Network Watcher Flow Log
+  ##  Firewall Policy Rule Collection Group
+
   ```hcl
-  {{ include "examples/network-watcher-flow-log-example/main.tf" }}
+  {{ include "examples/firewall-policy-rule-collection-group-example/main.tf" }}
   ```
+
 
   {{ .Providers }}
 
