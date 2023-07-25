@@ -1,6 +1,6 @@
-# Terraform module | AzureRM - Invullen
+# Terraform module | AzureRM - Firewall Policy Rule Collection Group
 
-This Terraform module is designed to create a Invullen for Azure.
+This Terraform module is designed to create a Firewall Policy Rule Collection Group for Azure.
 
 ## Pre-requisites
 
@@ -9,7 +9,7 @@ Using the modules requires the following pre-requisites:
 
 ## Usage
 
-`Invullen`
+`InvFirewall Policy Rule Collection Groupullen`
 
 ```hcl
 
