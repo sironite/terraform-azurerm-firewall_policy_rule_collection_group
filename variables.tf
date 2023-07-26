@@ -54,27 +54,27 @@ variable "application_rule_collections" {
       }))
     }))
   }))
-
+  default = {}
   description = "A map of application rule collections to apply to the firewall policy."
 }
 
-# variable "nat_rule_collections" {
-#   type = map(object({
-#     name                  = string
-#     action                = string
-#     priority              = number
-#     rule = object({
-#       name                  = string
-#       protocol              = string
-#       source_addresses      = optional(list(string))
-#       source_ip_groups      = optional(list(string))
-#       destination_addresses = optional(list(string))
-#       destination_ports     = optional(list(string))
-#       translated_address    = string
-#       translated_fqdn       = optional(string)
-#       translated_port       = optional(number)
-#     })
-#   }))
-
-#   description = "A map of NAT rules to apply to the firewall policy."
-# }
+variable "nat_rule_collections" {
+  type = map(object({
+    name                  = string
+    action                = string
+    priority              = number
+    rules = map(object({
+      name                  = string
+      protocols              = string
+      source_addresses      = optional(list(string))
+      source_ip_groups      = optional(list(string))
+      destination_address = optional(list(string))
+      destination_ports     = optional(list(string))
+      translated_address    = string
+      translated_fqdn       = optional(string)
+      translated_port       = optional(number)
+    }))
+  }))
+  default = {}
+  description = "A map of NAT rules to apply to the firewall policy."
+}

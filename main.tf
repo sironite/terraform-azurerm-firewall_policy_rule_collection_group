@@ -62,26 +62,32 @@ resource "azurerm_firewall_policy_rule_collection_group" "this" {
       }
     }
   }
+  dynamic "nat_rule_collection" {
+    for_each = var.nat_rule_collections != null ? var.nat_rule_collections : {}
 
-  # dynamic "nat_rule_collection" {
-  #   for_each = var.nat_rule_collections != null ? var.nat_rules : {}
+    content {
+      name = nat_rule_collection.value.name
+      action = nat_rule_collection.value.action
+      priority = nat_rule_collection.value.priority
 
-  #   content {
-  #     name = nat_rule_collections.value.name
-  #     action = nat_rule_collections.value.action
-  #     priority = nat_rule_collections.value.priority
+      dynamic "rule" {
+        for_each = var.nat_rule_collections.value.rules != null ? var.nat_rule_collections.value.rules : {}
 
-  #     dynamic "rule"{
-  #       name = nat_rule_collections.value.rule.name
-  #       protocol = nat_rule_collections.value.rule.protocol
-  #       source_addresses = try(nat_rule_collections.value.rule.source_addresses, null)
-  #       source_ip_groups = try(nat_rule_collections.value.rule.source_ip_groups, null)
-  #       destination_addresses = try(nat_rule_collections.value.rule.destination_addresses, null)
-  #       destination_ports =try(nat_rule_collections.value.rule.destination_ports, null)
-  #       translated_address = nat_rule_collections.value.rule.translated_address
-  #       translated_fqdn = try(nat_rule_collections.value.rule.translated_fqdn, null)
-  #       translated_port = try(nat_rule_collections.value.rule.translated_port, null)
-  #     }
-  #   }    
-  # }
+        content {
+          name = rule.value.name
+          protocols = rule.value.protocols
+          source_addresses = try(rule.value.source_addresses, null)
+          source_ip_groups = try(rule.value.source_ip_groups, null)
+          destination_address = try(rule.value.destination_address, null)
+          destination_ports =try(rule.value.destination_ports, null)
+          translated_address = rule.value.translated_address
+          translated_fqdn = try(rule.value.translated_fqdn, null)
+          translated_port = try(rule.value.translated_port, null)
+        }
+        
+      }
+    }
+    
+  }
+
 }
