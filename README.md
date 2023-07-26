@@ -15,61 +15,9 @@ module "firewall_policy_rule_collection_group" {
   firewall_policy_id    = azurerm_firewall_policy.this.id
   priority              = 100
 
-  firewall_policy_rules = {
-    network_rule_collections = {
-      "example" = {
-        name     = "example"
-        priority = 100
-        action   = "Allow"
-
-        rules = {
-          "example" = {
-            name                  = "example"
-            description           = "example"
-            source_addresses      = [""]
-            destination_addresses = [""]
-          }
-        }
-      }
-      "expample2" = {
-        name     = "example2"
-        priority = 100
-        action   = "Allow"
-
-        rules = {
-          "example2" = {
-            name                  = "example2"
-            description           = "example2"
-            source_addresses      = [""]
-            destination_addresses = [""]
-          }
-        }
-      }
-    }
-    application_rule_collections = {
-      "example" = {
-        name     = "example"
-        priority = 100
-        action   = "Allow"
-
-        rules = {
-          "example" = {
-            name                  = "example"
-            source_addresses      = [""]
-            destination_fqdn_tags = [""]
-            destination_fqdns     = [""]
-            protocols = {
-              "example" = {
-                type = "TCP"
-                port = 80
-              }
-            }
-          }
-        }
-      }
-
-    }
-  }
+  network_rule_collections     = var.network_rule_collections
+  application_rule_collections = var.application_rule_collections
+  nat_rule_collections         = var.nat_rule_collections
 }
 ```
 
@@ -96,8 +44,10 @@ No modules.
 |------|-------------|------|:--------:|
 | collection\_group\_name | The name of the firewall policy rule collection group. | `string` | yes |
 | firewall\_policy\_id | The ID of the firewall policy to associate the rule collection group with. | `string` | yes |
-| firewall\_policy\_rules | A map of firewall policy rules to apply to the rule collection group. | <pre>map(object({<br>    enabled  = bool<br>    priority = number<br>    application_rule_collections = map(object({<br>      name     = string<br>      priority = number<br>      action   = string<br>      rules = map(object({<br>        name                  = string<br>        source_addresses      = optional(list(string))<br>        source_ip_groups      = optional(list(string))<br>        destination_fqdn_tags = optional(list(string))<br>        destination_fqdns     = optional(list(string))<br>        protocols = list(object({<br>          type = optional(string)<br>          port = optional(number)<br>        }))<br>      }))<br>    }))<br>    network_rule_collections = map(object({<br>      name     = string<br>      priority = number<br>      action   = string<br>      rules = map(object({<br>        name                  = string<br>        source_addresses      = optional(list(string))<br>        source_ip_groups      = optional(list(string))<br>        destination_addresses = optional(list(string))<br>        destination_ip_groups = optional(list(string))<br>        destination_ports     = list(string)<br>        destination_fqdns     = optional(list(string))<br>        protocols             = list(string)<br>      }))<br>    }))<br>    nat_rule_collections = map(object({<br>      priority = number<br>      action   = string<br>      rules = map(object({<br>        name                = string<br>        source_addresses    = optional(list(string))<br>        source_ip_groups    = optional(list(string))<br>        destination_ports   = optional(list(string))<br>        destination_address = string<br>        translated_port     = number<br>        translated_address  = string<br>        protocols           = list(string)<br>      }))<br>    }))<br>  }))</pre> | yes |
 | priority | The priority of the rule collection group. | `number` | yes |
+| application\_rule\_collections | A map of application rule collections to apply to the firewall policy. | <pre>map(object({<br>    name     = string<br>    priority = number<br>    action   = string<br>    rules = map(object({<br>      name                  = string<br>      description           = optional(string)<br>      source_addresses      = optional(list(string))<br>      source_ip_groups      = optional(list(string))<br>      destination_addresses = optional(list(string))<br>      destination_urls      = optional(list(string))<br>      destination_fqdns     = optional(list(string))<br>      terminate_tls         = optional(bool)<br>      web_categories        = optional(list(string))<br>      protocols             = map(object({<br>        port = number<br>        type = string<br>      }))<br>    }))<br>  }))</pre> | no |
+| nat\_rule\_collections | A map of NAT rules to apply to the firewall policy. | <pre>map(object({<br>    name                  = string<br>    action                = string<br>    priority              = number<br>    rules = map(object({<br>      name                  = string<br>      protocols              = string<br>      source_addresses      = optional(list(string))<br>      source_ip_groups      = optional(list(string))<br>      destination_address = optional(list(string))<br>      destination_ports     = optional(list(string))<br>      translated_address    = string<br>      translated_fqdn       = optional(string)<br>      translated_port       = optional(number)<br>    }))<br>  }))</pre> | no |
+| network\_rule\_collections | A map of network rule collections to apply to the firewall policy. | <pre>map(object({<br>    name     = string<br>    priority = number<br>    action   = string<br>    rules = map(object({<br>      name                  = string<br>      source_addresses      = optional(list(string))<br>      source_ip_groups      = optional(list(string))<br>      destination_addresses = optional(list(string))<br>      destination_ip_groups = optional(list(string))<br>      destination_ports     = list(string)<br>      destination_fqdns     = optional(list(string))<br>      protocols             = list(string)<br>    }))<br>  }))</pre> | no |
 
 ## Outputs
 
